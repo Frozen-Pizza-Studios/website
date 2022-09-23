@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            width: 100%;
+            min-height: 100%;
+            font-family: 'Work Sans';
+            color: white;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        a:visited {
+            color: inherit;
+        }
+
+        :link {
+            color: inherit;
+        }
+
+        .background {
+            background-color: #191919;
+        }
+
+        .content {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 512px;
+            width: 100%;
+            min-height: 100%;
+        }
+
+        .brand {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo {
+            min-width: 256px;
+            min-width: 256px;
+            width: 512px;
+            height: 512px;
+        }
+
+        .logo-text {
+            width: 512px;
+            font-size: 4rem;
+            text-align: center;
+        }
+
+        .links {
+            margin-top: 4rem;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .links * {
+            margin: 0.5rem;
+        }
+
+        .links a {
+            display: inline-flex;
+            align-items: center;
+            text-overflow: clip;
+        }
+
+        .links a img {
+            margin-right: .5rem;
+            width: 1em;
+            height: 1em;
+        }
+    </style>
+</head>
+
+<body class="background">
+    <div class="content">
+        <div>
+            <div class="brand">
+                <img class="logo" src="/logo.png" alt="Frozen Pizza Studios Logo" />
+                <div class="logo-text">FROZEN PIZZA STUDIOS</div>
+            </div>
+
+            <div class="links">
+                <a href="https://store.steampowered.com/app/2125190/Bowling_Hills/">
+                    <img src="/steam.svg" alt="Steam Logo" />
+                    Bowling Hills
+                </a>
+                <a href="https://twitter.com/frozenzastudios">
+                    <img src="/twitter.svg" alt="Twitter Logo" />
+                    Twitter
+                </a>
+                <a href="mailto:frozenpizzastudios@gmail.com">
+                    <img src="/email.svg" alt="Email Icon" />
+                    Email
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
