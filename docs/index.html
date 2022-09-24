@@ -13,6 +13,7 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
         body {
             padding: 0;
@@ -45,26 +46,27 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            min-width: 512px;
+            align-items: center;
+            min-width: 300px;
             width: 100%;
             min-height: 100%;
+            padding: 1em;
+            box-sizing: border-box;
         }
 
         .brand {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            text-align: center;
+            max-width: 512px;
+            padding: 0 1rem;
         }
 
         .logo {
-            min-width: 256px;
-            min-width: 256px;
-            width: 512px;
-            height: 512px;
+            width: 100%;
+            height: auto;
         }
 
         .logo-text {
-            width: 512px;
+            width: 100%;
             font-size: 4rem;
             text-align: center;
         }
@@ -73,6 +75,7 @@
             margin-top: 4rem;
             font-size: 2rem;
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
             justify-content: center;
         }
@@ -92,14 +95,27 @@
             width: 1em;
             height: 1em;
         }
+
+        @media only screen and (max-width: 512px) {
+            .logo-text {
+                font-size: 3rem;
+            }
+        }
+
+        @media only screen and (max-width: 380px) {
+            .logo-text {
+                font-size: 2rem;
+            }
+        }
     </style>
 </head>
 
 <body class="background">
     <div class="content">
-        <div>
             <div class="brand">
-                <img class="logo" src="img/logo.png" alt="Frozen Pizza Studios Logo" />
+                <div>
+                    <img class="logo" src="img/logo.png" alt="Frozen Pizza Studios Logo" />
+                </div>
                 <div class="logo-text">FROZEN PIZZA STUDIOS</div>
             </div>
 
@@ -117,7 +133,6 @@
                     Email
                 </a>
             </div>
-        </div>
     </div>
 </body>
 
