@@ -13,7 +13,7 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=.5" />
     <style>
         body {
             padding: 0;
@@ -47,11 +47,24 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-width: 300px;
+            min-width: 650px;
             width: 100%;
             min-height: 100%;
             padding: 1em;
             box-sizing: border-box;
+        }
+
+        .content > * {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .content > :first-child {
+            margin-top: initial;
+        }
+
+        .content > :last-child {
+            margin-bottom: initial;
         }
 
         .brand {
@@ -72,25 +85,22 @@
         }
 
         .links {
-            margin-top: 4rem;
             font-size: 2rem;
             display: flex;
-            flex-wrap: wrap;
             align-items: center;
-            justify-content: center;
         }
 
-        .links * {
+        .links > * {
             margin: 0.5rem;
         }
 
-        .links a {
+        .links > a {
             display: inline-flex;
             align-items: center;
             text-overflow: clip;
         }
 
-        .links a img {
+        .links > a > img {
             margin-right: .5rem;
             width: 1em;
             height: 1em;
@@ -112,27 +122,35 @@
 
 <body class="background">
     <div class="content">
-            <div class="brand">
-                <div>
-                    <img class="logo" src="img/logo.png" alt="Frozen Pizza Studios Logo" />
-                </div>
-                <div class="logo-text">FROZEN PIZZA STUDIOS</div>
+        <div class="brand">
+            <div>
+                <img class="logo" src="img/logo.png" alt="Frozen Pizza Studios Logo" />
             </div>
+            <div class="logo-text">FROZEN PIZZA STUDIOS</div>
+        </div>
 
-            <div class="links">
-                <a href="https://store.steampowered.com/app/2125190/Bowling_Hills/">
-                    <img src="img/steam.svg" alt="Steam Logo" />
-                    Bowling Hills
-                </a>
-                <a href="https://twitter.com/frozenzastudios">
-                    <img src="img/twitter.svg" alt="Twitter Logo" />
-                    Twitter
-                </a>
-                <a href="mailto:frozenpizzastudios@gmail.com">
-                    <img src="img/email.svg" alt="Email Icon" />
-                    Email
-                </a>
-            </div>
+        <div>
+            <iframe src="https://store.steampowered.com/widget/2125190/" frameborder="0" width="646"
+                height="190"></iframe>
+        </div>
+
+        <div class="links">
+            <a href="https://twitter.com/frozenzastudios">
+                <img src="img/twitter.svg" />
+                Twitter
+            </a>
+            <a href="https://www.youtube.com/channel/UChQcrZDU9D5o7C5vbkbcciA">
+                <img src="img/youtube.svg" />
+                Youtube
+            </a>
+            <a href="https://www.tiktok.com/@frozenzastudios">
+                TikTok
+            </a>
+            <a href="mailto:frozenpizzastudios@gmail.com">
+                <img src="img/email.svg" />
+                Email
+            </a>
+        </div>
     </div>
 </body>
 
