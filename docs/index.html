@@ -70,17 +70,19 @@
         .brand {
             text-align: center;
             max-width: 512px;
-            padding: 0 1rem;
+            width: 30vh;
         }
 
         .logo {
-            width: 100%;
-            height: auto;
+            width: auto;
+            height: 30vh;
+            max-height: 512px;
+            min-height: 128px;
         }
 
         .logo-text {
             width: 100%;
-            font-size: 4rem;
+            font-size: 4vh;
             text-align: center;
         }
 
@@ -106,7 +108,17 @@
             height: 1em;
         }
 
-        @media only screen and (max-width: 512px) {
+        @media only screen and (max-height: 400px) {
+            .brand {
+                width: 128px;
+            }
+
+            .logo-text {
+                font-size: 1rem;
+            }
+        }
+
+        /* @media only screen and (max-width: 512px) {
             .logo-text {
                 font-size: 3rem;
             }
@@ -116,7 +128,7 @@
             .logo-text {
                 font-size: 2rem;
             }
-        }
+        } */
     </style>
 </head>
 
