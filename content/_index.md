@@ -1,4 +1,5 @@
 ---
+title: Frozen Pizza Studios
 ---
 
 # Frozen Pizza Studios, LLC
