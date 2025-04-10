@@ -5,10 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <link rel="stylesheet" href="pico.v2.1.1.classless.amber.min.css">
+    <style>
+        /* prevent nav links from changing color after visiting */
+        nav a {
+            color: inherit;
+        }
+    </style>
     <title>{% block title %}{{ config.title }}{% endblock title %}</title>
 </head>
 <body>
     <main class="container">
+        <nav>
+            <ul>
+                <li>
+                    <a href="/">
+                        <img src="logo.png" style="max-height: 10vh"/>
+                        <strong>Frozen Pizza Studios</strong>
+                    </a>
+                </li>
+            </ul>
+            <ul>
+                <li><a href="/games">Games</a></li>
+                <li><a href="/blog">Blog</a></li>
+            </ul>
+        </nav>
         {% block main %}{% endblock main %}
     </main>
 </body>
