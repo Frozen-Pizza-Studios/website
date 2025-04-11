@@ -1,0 +1,9 @@
+[[project]]
+name = "Bowling Hills"
+slug = "bowling-hills"
+desc = "A Wii-Sports-like golf/bowling crossover game with a high skill ceiling.  The lanes are long golf greens with hills and hazards, adding a layer of intrigue not found in traditional bowling games."
+tags = ["bowling-hills"]
+img = "img/bowling-hills.jpg"
+links = [
+    { name = "View on Steam", url = "https://store.steampowered.com/app/2125190/Bowling_Hills/" }
+]

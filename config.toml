@@ -1,6 +1,7 @@
 title = "Frozen Pizza Studios"
 base_url = "https://frozenpizzastudios.com"
 output_dir = "docs"
+theme = "kita"
 
 compile_sass = false
 build_search_index = true
@@ -8,7 +9,90 @@ generate_feeds = false
 
 taxonomies = [
   { name = "tags", feed = false },
+  { name = "authors", feed = false },
 ]
 
 [markdown]
 highlight_code = true
+
+# The Kita theme style config.
+[extra]
+# Enable KaTex math formula support globally.
+math = false
+# Enable mermaid support globally.
+mermaid = false
+# Enable comment support globally.
+comment = false
+# The URL of social image.
+social_image = "img/logo.png"
+
+[extra.style]
+# The custom background color.
+# bg_color = ""
+
+# The custom background color in dark mode.
+# bg_dark_color = ""
+
+# Enable header blur.
+# header_blur = true
+
+# The custom header color, only available when `header_blur` is false.
+# header_color = ""
+
+# The custom header color in dark mode, only available when `header_blur` is false.
+# header_dark_color = ""
+
+# The profile on home page.
+[extra.profile]
+name = "Frozen Pizza Studios"
+bio = "A small, Minnesota-based, indie game studio"
+# The URL of avatar.
+avatar_url = "img/logo.png"
+# Invert color in dark mode.
+avatar_invert = false
+
+# The social icons below the profile on the home page.
+# The `name` should be the file name of static/icons/*.svg or the icon name of https://simpleicons.org/
+[[extra.profile.social]]
+name = "steam"
+url = "https://store.steampowered.com/curator/42947587"
+
+[[extra.profile.social]]
+name = "twitter"
+url = "https://twitter.com/frozenzastudios"
+
+[[extra.profile.social]]
+name = "youtube"
+url = "https://www.youtube.com/channel/UChQcrZDU9D5o7C5vbkbcciA"
+
+[[extra.profile.social]]
+name = "tiktok"
+url = "https://www.tiktok.com/@frozenzastudios"
+
+[[extra.profile.social]]
+name = "email"
+url = "mailto:frozenpizzastudios@gmail.com"
+
+# The top menu.
+[[extra.menu]]
+name = "Projects"
+url = "$BASE_URL/projects"
+
+[[extra.menu]]
+name = "Posts"
+url = "$BASE_URL/posts"
+
+# # The giscus comment options, only available when comment is enabled.
+# [extra.giscus]
+# repo = ""
+# repo_id = ""
+# category = ""
+# category_id = ""
+# mapping = "pathname"
+# strict = 1
+# reactions_enabled = 0
+# emit_metadata = 0
+# input_position = "top"
+# theme = "light"
+# lang = "en"
+# loading = "lazy"
