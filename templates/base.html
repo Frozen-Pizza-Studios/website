@@ -14,7 +14,7 @@
     <title>{% block title %}{{ config.title }}{% endblock title %}</title>
 </head>
 <body>
-    <main class="container">
+    <header>
         <nav>
             <ul>
                 <li>
@@ -29,6 +29,8 @@
                 <li><a href="/blog">Blog</a></li>
             </ul>
         </nav>
+    </header>
+    <main class="container">
         {% block main %}{% endblock main %}
     </main>
 </body>
