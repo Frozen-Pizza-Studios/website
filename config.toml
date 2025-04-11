@@ -1,6 +1,5 @@
 title = "Frozen Pizza Studios"
 base_url = "https://frozenpizzastudios.com"
-output_dir = "docs"
 theme = "kita"
 
 compile_sass = false

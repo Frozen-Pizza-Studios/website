@@ -2,10 +2,9 @@
 Built with [Zola](https://www.getzola.org/documentation/getting-started/installation/)
 
 ## Development
+- `git submodule update --init` on the first checkout
 - `zola serve --open` to preview the site locally as you work
-- `zola build` before committing & pushing (subject to change)
-- `git submodule update --remote themes/kita` to update the theme
+- `git submodule update` to update the theme at a later date
 
 ## TODO
-- Use GitHub actions rather than committing build output
-- (stretch) Support comments through giscus
+- Support comments through giscus (kita supports this)
