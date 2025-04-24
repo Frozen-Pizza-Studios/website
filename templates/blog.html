@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}
+Blog | {{ config.title }}
+{% endblock %}
+
+{% block main %}
+<div class="h-with-nav">
+    <h1>{{ section.title }}</h1>
+    <nav>
+        <a href="/tags">Tags</a>
+        <a href="/">Home</a>
+    </nav>
+</div>
+
+{% for year, posts in section.pages | group_by(attribute="year") %}
+<h3>{{ year }} <sup>{{ posts | length }}</sup></h3>
+
+<ul>
+    {% for post in posts %}
+    <li style="list-style: none">
+        <small style="opacity: 60%">{{ post.date | date(format="%m/%d") }}</small>
+        <a href="{{ post.permalink }}">{{ post.title }}</a>
+    </li>
+    {% endfor %}
+</ul>
+
+{% endfor %}
+{% endblock %}

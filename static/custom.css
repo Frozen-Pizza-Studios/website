@@ -1,0 +1,47 @@
+/* Inspired by existing styles for simple.css's "header nav" */
+.h-with-nav {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+.h-with-nav h1,
+.h-with-nav h2,
+.h-with-nav h3 {
+    flex-grow: 1;
+    margin: .75em 0;
+}
+
+nav.custom,
+.h-with-nav nav {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 1rem;
+    line-height: 2;
+    padding: 1rem 0 0 0;
+}
+
+.h-with-nav nav a,
+.h-with-nav nav a:visited,
+nav.custom a,
+nav.custom a:visited {
+    margin: 0 0.5rem 1rem 0.5rem;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--standard-border-radius);
+    color: var(--text);
+    display: inline-block;
+    padding: 0.1rem 1rem;
+    text-decoration: none;
+}
+
+.h-with-nav nav a:hover,
+.h-with-nav nav a.current,
+.h-with-nav nav a[aria-current="page"],
+.h-with-nav nav a[aria-current="true"],
+nav.custom a:hover,
+nav.custom a.current,
+nav.custom a[aria-current="page"],
+nav.custom a[aria-current="true"] {
+    border-color: var(--accent);
+    color: var(--accent);
+    cursor: pointer;
+}

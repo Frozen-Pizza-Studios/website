@@ -1,0 +1,32 @@
+title = "Frozen Pizza Studios"
+base_url = "https://frozenpizzastudios.com"
+
+taxonomies = [
+  { name = "tags", feed = false },
+]
+
+compile_sass = false
+generate_feeds = false
+
+[markdown]
+highlight_code = true
+
+[[extra.social]]
+name = "steam"
+url = "https://store.steampowered.com/curator/42947587"
+[[extra.social]]
+name = "x"
+url = "https://x.com/frozenzastudios"
+[[extra.social]]
+name = "youtube"
+url = "https://www.youtube.com/channel/UChQcrZDU9D5o7C5vbkbcciA"
+[[extra.social]]
+name = "tiktok"
+url = "https://www.tiktok.com/@frozenzastudios"
+[[extra.social]]
+name = "email"
+url = "mailto:frozenpizzastudios@gmail.com"
+
+[[extra.steam_games]]
+name = "Bowling Hills"
+widget_id = "2125190"
