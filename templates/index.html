@@ -43,6 +43,14 @@ main {
     letter-spacing: 0.1em;
 }
 
+#intro h1 {
+    font-size: 3.5rem;
+}
+
+#intro h2 {
+    font-size: 3rem;
+}
+
 .disable-animation {
     opacity: 1 !important;
     scale: 100% !important;
@@ -89,15 +97,16 @@ iframe {
 {% block extra_script %}
 <script>
     let everythingElse = document.getElementsByClassName("animation-disableable");
+    let animationsSkipped = false;
     window.onscroll = function() {
+        if (animationsSkipped) return;
+
         if (window.scrollY > 0) {
             for (const e of everythingElse) {
                 e.classList.add("disable-animation");
             }
-        } else {
-            for (const e of everythingElse) {
-                e.classList.remove("disable-animation");
-            }
+
+            animationsSkipped = true;
         }
     };
 </script>
