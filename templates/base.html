@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/simple.rev8640699.min.css">
+    <link rel="stylesheet" href="/custom.css">
+    <style>
+        /* Force background color to be same as video */
+        :root {
+            color-scheme: dark;
+            --bg: #181818;
+            --sans-font: 'Lato', sans-serif;
+            --mono-font: Consolas, Menlo, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+        }
+        /* We like thicc headers */
+        h1, h2 {
+            font-weight: 900;
+        }
+        footer {
+            text-align: center;
+        }
+    </style>
+    {% block extra_style %}{% endblock extra_style %}
+    <title>
+        {% block title %}{{ config.title }}{% endblock title %}
+    </title>
+</head>
+<body>
+    <main>
+        {% block main %}{% endblock main %}
+    </main>
+    <footer>
+        <div style="margin-bottom: 0.5em">
+        {% for social in config.extra.social %}
+            <a
+                href="{{ social.url }}"
+                target="_blank"
+                title="{{ social.name }}"
+                style="text-decoration: none; margin-left: 0.25em">
+                <img src="/icons/{{ social.name }}.svg" width="28px"/>
+            </a>
+        {% endfor %}
+        </div>
+        &copy;2023&ndash;{{ now() | date(format="%Y") }} Frozen Pizza Studios, LLC
+    </footer>
+    {% block extra_script %}{% endblock extra_script %}
+</body>
+</html>

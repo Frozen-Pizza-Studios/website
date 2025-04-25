@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block extra_style %}
+<style>
+main {
+    padding-top: 0 !important;
+}
+
+#intro {
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5em;
+}
+
+#intro video {
+    max-width: 100%;
+    max-height: 600px;
+    min-width: 300px;
+    min-height: 300px;
+    flex-shrink: 1;
+}
+
+@keyframes title-fade-in {
+    0% {
+        opacity: 0;
+        scale: 50%;
+    }
+    100% {
+        opacity: 1;
+        scale: 100%;
+    }
+}
+
+#intro h1, #intro h2 {
+    animation: .4s title-fade-in;
+    animation-delay: 1s;
+    animation-fill-mode: backwards;
+    
+    margin: 0;
+    text-align: center;
+    letter-spacing: 0.1em;
+}
+
+#intro h1 {
+    font-size: 3.5rem;
+}
+
+#intro h2 {
+    font-size: 3rem;
+}
+
+.disable-animation {
+    opacity: 1 !important;
+    scale: 100% !important;
+}
+
+iframe {
+    /*
+    Without setting the color scheme, the embed has an opaque white background.
+
+    iframes have the "helpful" property of rendering a TRANSPARENT background
+    when the outer and inner page's `color-scheme`s MATCH, and an OPAQUE
+    background (corresponding to the inner color scheme) when they MISMATCH.
+
+    So even though we want the embed to have a dark (transparent) background,
+    the way we do that in this case is to set the iframe's color-scheme to
+    `light` (totally not confusing, right?)
+
+    https://elvery.net/drzax/iframe-background-colour-transparent-dark-mode/
+    */
+    color-scheme: light;
+
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: .6s fade-in;
+    animation-delay: 1.4s;
+    animation-fill-mode: backwards;
+}
+</style>
+{% endblock extra_style %}
+
+{% block extra_script %}
+<script>
+    let everythingElse = document.getElementsByClassName("animation-disableable");
+    let animationsSkipped = false;
+    window.onscroll = function() {
+        if (animationsSkipped) return;
+
+        if (window.scrollY > 0) {
+            for (const e of everythingElse) {
+                e.classList.add("disable-animation");
+            }
+
+            animationsSkipped = true;
+        }
+    };
+</script>
+{% endblock %}
+
+{% block main %}
+<div id="intro">
+    <video muted autoplay playsinline preload="auto">
+        <source src="media/logo-video-cropped.webm" type="video/webm"></source>
+    </video>
+    <h1 class="animation-disableable" style="margin-bottom: 0">FROZEN PIZZA</h1>
+    <h2 class="animation-disableable">STUDIOS</h2>
+</div>
+
+<div class="animation-disableable fade-in">
+    <div style="margin-bottom: 1em">
+        {% for game in config.extra.steam_games %}
+        <iframe
+            src="https://store.steampowered.com/widget/{{ game.widget_id }}/?utm_source=fps-website"
+            frameborder="0"
+            width="650"
+            height="190">
+        </iframe>
+        {% endfor %}
+    </div>
+    
+    <div class="h-with-nav">
+        <h2>Latest Posts</h2>
+        <nav>
+            <a href="/blog">All Posts</a>
+        </nav>
+    </div>
+    {% set blog = get_section(path="blog/_index.md") %}
+    {% set pages = blog.pages %}
+    {% set page_limit = 3 %}
+    {% include "post_list.html" %}
+</div>
+{% endblock %}

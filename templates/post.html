@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ page.title }} | {{ config.title }}
+{% endblock %}
+
+{% block main %}
+<h1>{{ page.title }}</h1>
+<small style="display: block; margin-bottom: 1em;">
+    {{ page.date | date(format="%Y/%m/%d") }} · {{ page.reading_time }}mins
+    {% if page.taxonomies %}
+    ·
+    {% for tag in page.taxonomies.tags %}
+    <a href="/tags/{{ tag }}" style="padding-right: 0.25em">#{{ tag }}</a>
+    {% endfor %}
+{% endif %}
+</small>
+
+{{ page.content | safe }}
+
+<nav class="custom">
+    {% if page.higher %}
+    <a href="{{ page.higher.permalink }}">
+        <span>←</span>
+        {{ page.higher.title }}
+    </a>
+    {% endif %}
+    <a href="/">Home</a>
+    <a href="/blog">All Posts</a>
+    <span style="flex-grow: 1"></span>
+    {% if page.lower %}
+    <a href="{{ page.lower.permalink }}">
+        {{ page.lower.title }}
+        <span>→</span>
+    </a>
+    {% endif %}
+</nav>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% if pages is defined %}
+{% elif paginator is defined %}
+    {% set pages = paginator.pages %}
+{% elif term is defined %}
+    {% set pages = term.pages %}
+{% elif section is defined %}
+    {% set pages = section.pages %}
+{% endif %}
+
+{% if page_limit is defined %}
+    {% set pages = pages | slice(end=page_limit) %}
+{% endif %}
+
+{% for page in pages %}
+<article>
+    {% if page.extra.cover.image %}
+    <figure>
+        <img
+        src="{{ get_url(path=page.extra.cover.image) }}"
+        alt="{{ page.extra.cover.alt | default(value='cover') }}"
+        />
+    </figure>
+    {% endif %}
+    
+    <div style="display: flex; flex-wrap: nowrap; justify-content: space-between;">
+        <a href="{{ page.permalink }}">
+            <h3 style="margin: 0">{{ page.title }}</h3>
+        </a>
+        <small style="flex-shrink: 0">
+            {{ page.date | date(format="%Y/%m/%d") }}
+        </small>
+    </div>
+
+    {% if page.description %}
+    <p style="margin-bottom: 0">{{ page.description }}</p>
+    {% elif page.summary %}
+    <p style="margin-bottom: 0">{{ page.summary | safe }}</p>
+    {% endif %}
+</article>
+{% endfor %}

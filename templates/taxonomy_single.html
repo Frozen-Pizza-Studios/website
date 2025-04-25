@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="h-with-nav">
+    <h1>#{{ term.name }}</h1>
+    <nav>
+        <a href="/tags">Tags</a>
+        <a href="/">Home</a>
+    </nav>
+</div>
+{% include "post_list.html" %}
+{% endblock %}
