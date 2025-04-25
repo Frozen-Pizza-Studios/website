@@ -4,6 +4,7 @@
 <style>
 main {
     padding-top: 0 !important;
+    min-width: 300px;
 }
 
 #intro {
@@ -90,6 +91,26 @@ iframe {
     animation: .6s fade-in;
     animation-delay: 1.4s;
     animation-fill-mode: backwards;
+}
+
+@media only screen and (max-width: 512px) {
+    #intro h1 {
+        font-size: 2.4rem;
+    }
+
+    #intro h2 {
+        font-size: 2rem;
+    }
+}
+
+@media only screen and (max-width: 352px) {
+    #intro h1 {
+        font-size: 2.1rem;
+    }
+
+    #intro h2 {
+        font-size: 1.8rem;
+    }
 }
 </style>
 {% endblock extra_style %}
