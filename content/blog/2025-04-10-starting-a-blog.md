@@ -1,6 +1,6 @@
 ---
 title: Starting a blog
-description: Time to dust off those web-dev skills!
+description: We're also starting work on our next game 👀
 taxonomies:
   tags: ["writing"]
 ---
