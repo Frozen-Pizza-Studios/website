@@ -1,7 +1,6 @@
 # Frozen Pizza Studios Website
 
 ## Quick Start
-- Install [Git LFS](https://git-lfs.com/) and run `git lfs install`
 - Install [Zola](https://www.getzola.org/documentation/getting-started/installation/)
 - `zola serve --open` to preview the site locally as you work
 
