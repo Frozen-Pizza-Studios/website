@@ -9,12 +9,25 @@
     <link rel="stylesheet" href="/simple.rev8640699.min.css">
     <link rel="stylesheet" href="/custom.css">
     <style>
-        /* Force background color to be same as video */
         :root {
-            color-scheme: dark;
-            --bg: #181818;
+            /* Override default fonts */
             --sans-font: 'Lato', sans-serif;
             --mono-font: Consolas, Menlo, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+            /* Make background color be same as video */
+            --bg: #181818;
+            /* Force dark mode, even if user prefers light:
+            https://github.com/kevquirk/simple.css/wiki/Getting-Started-With-Simple.css#use-dark-or-light-mode-only
+            */
+            color-scheme: dark;
+            --accent-bg: #232323;
+            --text: #dcdcdc;
+            --text-light: #ababab;
+            --accent: #ffb300;
+            --accent-hover: #ffe099;
+            --accent-text: var(--bg);
+            --code: #f06292;
+            --preformatted: #ccc;
+            --disabled: #111;
         }
         /* We like thicc headers */
         h1, h2 {
