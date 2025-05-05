@@ -1,6 +1,6 @@
 ---
 title: Building a Level Builder
-description: It's turtles all the way down 🐢
+description: Exploring how and why we plan to automate aspects of our level design process
 draft: true
 extra:
   mermaid: true
@@ -8,16 +8,24 @@ taxonomies:
   tags: ["writing", "devlog"]
 ---
 
-## But first, a tangent
-_Feel free to [skip ahead](#coming-back-down-to-earth) if you're more interested in the title._
+_Feel free to [skip ahead](#continue) if you don't care about "the why."_
 
-I often struggle with the choice of whether plan ahead, or just focus on the here and now;  Whether to build more than what's strictly needed.
+When programming, I often struggle to choose between planning ahead, or just focusing on the here and now.  I don't want to over-engineer or abstract prematurely, but I also don't want to be short-sighted.
 
-As a recent example, I wondered if this blog needs a [tag system](/tags).  The immediate questions I had to ask were:
-- **How much time** would a tag system cost?  If we're talking minutes, just build it &mdash; better to _have_ the option than _not_ to have it it.  If we're talking days, maybe consider better uses of time.
-- **How much value** would a tagging system provide, optimistically?  Will we ever have enough posts to even _need_ a system of organization?
+I've got one of these decisions on my hands right now:
 
-We might think of these kinds of decisions more generally like this:
+I'm in the early stages of planning a level builder system for a new game.  To be clear, we don't plan to expose this tool to players (at least not yet).  So what we actually need is _levels_, and we while we _could_ build a level builder as a stepping stone, that is not strictly required.
+
+Then it's worth asking whether the level builder will _actually save more time than it will cost to build it._  The following xkcd comics also come to mind:
+- [The General Problem](https://www.xkcd.com/974/)
+- [Is it Worth the Time?](https://xkcd.com/1205/)
+- [Automation](https://xkcd.com/1319/)
+
+Total time spent is not necessarily the only factor to consider though.  We value other things, such as:
+- **Flexibility**: it should be easy to change and iterate on level designs
+- **Consistency**: levels should feel cohesive (although not too "cookie-cutter")
+
+With that in mind, we might visualize the decision space more like this:
 
 ```mermaid
 quadrantChart
@@ -30,21 +38,11 @@ quadrantChart
   quadrant-4 Bad plan
 ```
 
-I also frequently refer to this wonderful xkcd chart: [_Is it Worth the Time?_](https://xkcd.com/1205/)
-
-I've found that, at work, management always wants "quick wins," and not necessarily for bad reason.  They've gone as far as to formally define "team values" that include the following:
-
-> We only build what's needed right now, and never what we _might_ need later.
-
-Maybe it's a good rule of thumb, I take issue with the discussion ending there.  Never building beyond immediate needs can be short-sighted, making your situation worse long-term.  Also, [exploration is valuable in ways that are difficult to predict](https://www.nasa.gov/specials/60counting/tech.html).  And sometimes the path you want to explore falls under the "risky plan" or even "bad plan" quadrants.
-
-We should consider additional aspects to make a better decision:
-- **How urgently** do we need to meet our immediate goals?  Is a delay for exploration time we can afford to spend?
-- **How certain** is the value of our exploration?  Are we expecting a good return on investment?  Or is it impossible to know?
+However, "value" can be difficult to quantify and predict.  I don't know for certain how useful this level builder will actually be.  "Time consuming" is also a relative term &mdash; it depends on how urgently you need to meet other goals.  Thus it may also be useful to consider the following:
 
 ```mermaid
 quadrantChart
-  title Should I build it now?
+  title Should I still build that feature?
   x-axis Plenty of time --> Short on time
   y-axis Uncertain value --> Definite value
   quadrant-1 Plan for it soon
@@ -53,20 +51,9 @@ quadrantChart
   quadrant-4 Postpone indefinitely
 ```
 
-Closely related to all of this is the decision to generalize a solution to a problem.  Much like premature optimization, premature abstraction can be detrimental to the health of a code base.  Particularly when you choose the _wrong_ abstraction.
+We also can't forget we humans only have finite time on this planet.  What is valuable in a business sense is sometimes (often) at odds with "living one's best life."  Don't discount what you enjoy just because it isn't profitable.
 
-```mermaid
-quadrantChart
-  title Abstractions
-  x-axis Wrong --> Correct
-  y-axis Unnecessary --> Useful
-  quadrant-1 A godsend
-  quadrant-2 Suboptimal and limiting
-  quadrant-3 The literal worst
-  quadrant-4 Overkill, but flexible
-```
-
-We also can't forget that we are humans with finite time on this planet to make the most of.  What is valuable in a business sense is sometimes (often) at odds with living one's best life:
+(I swear this is my last quadrant chart)
 
 ```mermaid
 quadrantChart
@@ -74,20 +61,29 @@ quadrantChart
   x-axis Boring / Torture --> Interesting / Fun
   y-axis Unprofitable --> Profitable
   quadrant-1 Aim here
-  quadrant-2 Sometimes needed
+  quadrant-2 Sometimes necessary
   quadrant-3 Avoid
   quadrant-4 Not a bad place to be
 ```
 
-## Coming back down to Earth
-Alright, alright, I'm getting a bit carried away with philosophizing and making these nifty quadrant charts.
+Alright, enough philosophizing.
 
-This post is about **building a level builder**, or starting that process anyway.  I'm doing this because:
-- I'm willing to invest the time in a high-value tool
-- I have no real deadlines (for now) and have reason to believe the work will pay off
-- I care more about doing something interesting and fun than profiting right away
+As you probably pieced together from the title, I've decided to pursue a level builder system.  I have reason to believe it will be valuable, I am in no rush, and I think it will be interesting.
 
-So what should this tool look like?
+<div id="continue"></div>
 
-## TODO
-Discuss goals, priorities
+## Inspiration
+I'm quite intrigued by [Oskar Stålberg](https://x.com/OskSta)'s approach to procedural content generation.  If you're not familiar, he's the creator of [Townscaper](https://store.steampowered.com/app/1291340/Townscaper/), a small sandbox game in which you create cute island towns.  Here's a small taste:
+
+<blockquote class="twitter-tweet" data-media-max-width="560" data-dnt="true"><p lang="en" dir="ltr">I needed some more greenery, so now if you build an enclosed area it becomes a backyard! <a href="https://t.co/IOjFOPqKZv">pic.twitter.com/IOjFOPqKZv</a></p>&mdash; Oskar Stålberg (@OskSta) <a href="https://twitter.com/OskSta/status/1238474550511308800?ref_src=twsrc%5Etfw">March 13, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+
+The game does several things quite well.  The first is that it's incredibly easy to be productive.  Aside from customizing the colors of your buildings, all you do is left click on building faces to extend them, and right click to shrink/delete them.  That's it.
+
+Behind the scenes, there's an algorithm that decides whether the blocks you place require stairs to navigate, what angles the roofs should be, whether a segment requires extra structural support, where doors and windows should be, etc.  There's no need to bother the player with these details.
+
+The other thing it does very well is producing towns that look organic and hand-crafted.  The game does not use a evenly-tiling grid, which forces the geometry to stretch and distort in ways that it wouldn't have to if it were on a regular rectangular or hexagonal grid.  This alone does a lot of heavy lifting, but the randomized decorative elements also go a long way.
+
+## What we want for our level builder
+I'm not sure how closely we want to replicate Townscaper's approach, but it's a good reference point.
+
+TODO
