@@ -10,11 +10,12 @@ taxonomies:
 
 _Feel free to [skip ahead](#continue) if you don't care about "the why."_
 
+## Motivation
 When programming, I often struggle to choose between planning ahead, or just focusing on the here and now.  I don't want to over-engineer or abstract prematurely, but I also don't want to be short-sighted.
 
 I've got one of these decisions on my hands right now:
 
-I'm in the early stages of planning a level builder system for a new game.  To be clear, we don't plan to expose this tool to players (at least not yet).  So what we actually need is _levels_, and we while we _could_ build a level builder as a stepping stone, that is not strictly required.
+I'm in the early stages of planning a level builder system for Frozen Pizza Studios' next title.  To be clear, we don't plan to expose this tool to players (at least not yet).  So what we actually need is _levels_, and we while we _could_ build a level builder as a stepping stone, that is not strictly required.
 
 Then it's worth asking whether the level builder will _actually save more time than it will cost to build it._  The following xkcd comics also come to mind:
 - [The General Problem](https://www.xkcd.com/974/)
@@ -38,7 +39,7 @@ quadrantChart
   quadrant-4 Bad plan
 ```
 
-However, "value" can be difficult to quantify and predict.  I don't know for certain how useful this level builder will actually be.  "Time consuming" is also a relative term &mdash; it depends on how urgently you need to meet other goals.  Thus it may also be useful to consider the following:
+However, "value" can be difficult to quantify and predict.  I _think_ the level builder will be useful and a net positive for the game dev process, but I don't know for certain.  "Time consuming" is also a relative term &mdash; it depends on how urgently you need to meet other goals.  Thus it may also be useful to consider the following:
 
 ```mermaid
 quadrantChart
@@ -66,9 +67,7 @@ quadrantChart
   quadrant-4 Not a bad place to be
 ```
 
-Alright, enough philosophizing.
-
-As you probably pieced together from the title, I've decided to pursue a level builder system.  I have reason to believe it will be valuable, I am in no rush, and I think it will be interesting.
+As you probably pieced together from the title, I've already decided to pursue a level builder system.  I have reason to believe it will be valuable, I'm not in a rush, and I think it will be interesting.
 
 <div id="continue"></div>
 
@@ -81,9 +80,23 @@ The game does several things quite well.  The first is that it's incredibly easy
 
 Behind the scenes, there's an algorithm that decides whether the blocks you place require stairs to navigate, what angles the roofs should be, whether a segment requires extra structural support, where doors and windows should be, etc.  There's no need to bother the player with these details.
 
-The other thing it does very well is producing towns that look organic and hand-crafted.  The game does not use a evenly-tiling grid, which forces the geometry to stretch and distort in ways that it wouldn't have to if it were on a regular rectangular or hexagonal grid.  This alone does a lot of heavy lifting, but the randomized decorative elements also go a long way.
+The other thing it does very well is producing towns that look organic and hand-crafted.  The game uses an irregular grid, which forces the geometry to stretch and distort in ways that it wouldn't have to if it were on a regular repeating grid.  This alone does most of the heavy lifting, but the randomized decorative elements also go a long way.
 
 ## What we want for our level builder
-I'm not sure how closely we want to replicate Townscaper's approach, but it's a good reference point.
+I'm not sure how closely we want to replicate Townscaper's approach, but it's a good reference point.  Not too different from Townscaper, we intend to create an urban environment with interesting buildings.
 
-TODO
+### Finer control without hurting productivity
+Our gameplay takes place on motor scooters, which means we will likely need fine control over the shapes of roads and terrain.  A grid-based approach (regular or irregular) may be incompatible with the level of control we'll need.
+
+However, I think we'll still be able to automate the placement of things like sidewalks, crosswalks, traffic signals, turn lanes, parking spaces, etc.
+
+### Interior spaces and customizations
+We are debating how much we want to allow the players to go inside buildings and interact with them.  Extending the level builder to interior spaces would certainly increase its complexity.  Regardless, it will be imperative that we give ourselves "escape hatches" where we can tell the builder to place pre-fabricated objects or otherwise customize the generated output by hand.
+
+### Looks good out of the box
+As much as possible, I want the generated output to feel polished and only need minimal customizations.  Townscaper is proof to me that this is possible, but whether we'll be able to automate it remains to be seen.  I do think it's worth attempting though, because it will save on the very limited budget we have to hire an artist.
+
+## Next steps
+I've been ramping up on Godot in my spare time (coming from Unity), learning about mesh generation and editor plugins.  I needed to develop a clear vision and justification for this level builder before getting too deep, which is what this article is meant to achieve.
+
+I hope to have a development update in the coming weeks... or months.  It's almost summertime after all, and I'm not going to spent _all_ of it indoors 😎
