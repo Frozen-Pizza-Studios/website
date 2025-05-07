@@ -1,7 +1,6 @@
 ---
 title: Building a Level Builder
 description: Exploring how and why we plan to automate aspects of our level design process
-draft: true
 extra:
   mermaid: true
 taxonomies:
