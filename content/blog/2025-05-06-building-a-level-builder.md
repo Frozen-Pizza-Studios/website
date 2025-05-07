@@ -98,4 +98,4 @@ As much as possible, I want the generated output to feel polished and only need 
 ## Next steps
 I've been ramping up on Godot in my spare time (coming from Unity), learning about mesh generation and editor plugins.  I needed to develop a clear vision and justification for this level builder before getting too deep, which is what this article is meant to achieve.
 
-I hope to have a development update in the coming weeks... or months.  It's almost summertime after all, and I'm not going to spent _all_ of it indoors 😎
+I hope to have a development update in the coming weeks... or months.  It's almost summertime after all, and I'm not going to spend _all_ of it indoors 😎
