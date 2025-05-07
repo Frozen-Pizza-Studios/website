@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://frozenpizzastudios.com/</loc>
+    </url>
+    <url>
+        <loc>https://frozenpizzastudios.com/blog/</loc>
+    </url>
+    <url>
+        <loc>https://frozenpizzastudios.com/blog/building-a-level-builder/</loc>
+        <lastmod>2025-05-06</lastmod>
+    </url>
+    <url>
+        <loc>https://frozenpizzastudios.com/blog/starting-a-blog/</loc>
+        <lastmod>2025-04-10</lastmod>
+    </url>
+    <url>
+        <loc>https://frozenpizzastudios.com/tags/</loc>
+    </url>
+    <url>
+        <loc>https://frozenpizzastudios.com/tags/devlog/</loc>
+    </url>
+    <url>
+        <loc>https://frozenpizzastudios.com/tags/writing/</loc>
+    </url>
+</urlset>

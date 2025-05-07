@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/simple.rev8640699.min.css">
+    <link rel="stylesheet" href="/custom.css">
+    <style>
+        :root {
+            /* Override default fonts */
+            --sans-font: 'Lato', sans-serif;
+            --mono-font: Consolas, Menlo, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+            /* Make background color be same as video */
+            --bg: #181818;
+            /* Force dark mode, even if user prefers light:
+            https://github.com/kevquirk/simple.css/wiki/Getting-Started-With-Simple.css#use-dark-or-light-mode-only
+            */
+            color-scheme: dark;
+            --accent-bg: #232323;
+            --text: #dcdcdc;
+            --text-light: #ababab;
+            --accent: #ffb300;
+            --accent-hover: #ffe099;
+            --accent-text: var(--bg);
+            --code: #f06292;
+            --preformatted: #ccc;
+            --disabled: #111;
+        }
+        /* We like thicc headers */
+        h1, h2 {
+            font-weight: 900;
+        }
+        footer {
+            text-align: center;
+        }
+    </style>
+    
+<style>
+main {
+    padding-top: 0 !important;
+    min-width: 300px;
+}
+
+#intro {
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5em;
+}
+
+#intro video {
+    max-width: 100%;
+    max-height: min(600px, 70vh);
+    min-width: 300px;
+    min-height: 300px;
+    flex-shrink: 1;
+}
+
+@keyframes title-fade-in {
+    0% {
+        opacity: 0;
+        scale: 50%;
+    }
+    100% {
+        opacity: 1;
+        scale: 100%;
+    }
+}
+
+#intro h1, #intro h2 {
+    animation: .4s title-fade-in;
+    animation-delay: 1s;
+    animation-fill-mode: backwards;
+    
+    margin: 0;
+    text-align: center;
+    letter-spacing: 0.1em;
+}
+
+#intro h1 {
+    font-size: 3.5rem;
+}
+
+#intro h2 {
+    font-size: 3rem;
+}
+
+.disable-animation {
+    opacity: 1 !important;
+    scale: 100% !important;
+}
+
+iframe {
+    /*
+    Without setting the color scheme, the embed has an opaque white background.
+
+    iframes have the "helpful" property of rendering a TRANSPARENT background
+    when the outer and inner page's `color-scheme`s MATCH, and an OPAQUE
+    background (corresponding to the inner color scheme) when they MISMATCH.
+
+    So even though we want the embed to have a dark (transparent) background,
+    the way we do that in this case is to set the iframe's color-scheme to
+    `light` (totally not confusing, right?)
+
+    https://elvery.net/drzax/iframe-background-colour-transparent-dark-mode/
+    */
+    color-scheme: light;
+
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: .6s fade-in;
+    animation-delay: 1.4s;
+    animation-fill-mode: backwards;
+}
+
+@media only screen and (max-width: 512px) {
+    #intro h1 {
+        font-size: 2.4rem;
+    }
+
+    #intro h2 {
+        font-size: 2rem;
+    }
+}
+
+@media only screen and (max-width: 352px) {
+    #intro h1 {
+        font-size: 2.1rem;
+    }
+
+    #intro h2 {
+        font-size: 1.8rem;
+    }
+}
+</style>
+
+    <title>
+        Frozen Pizza Studios
+    </title>
+</head>
+<body>
+    <main>
+        
+<div id="intro">
+    <video muted autoplay playsinline preload="auto">
+        <source src="media/logo-video-cropped.webm" type="video/webm"></source>
+    </video>
+    <h1 class="animation-disableable" style="margin-bottom: 0">FROZEN PIZZA</h1>
+    <h2 class="animation-disableable">STUDIOS</h2>
+</div>
+
+<div class="animation-disableable fade-in">
+    <div style="margin-bottom: 1em">
+        
+        <iframe
+            src="https://store.steampowered.com/widget/2125190/?utm_source=fps-website"
+            frameborder="0"
+            width="650"
+            height="190">
+        </iframe>
+        
+    </div>
+    
+    <div class="h-with-nav">
+        <h2>Latest Posts</h2>
+        <nav>
+            <a href="/blog">All Posts</a>
+        </nav>
+    </div>
+    
+    
+    
+    
+
+
+
+    
+
+
+
+<article>
+    
+    
+    <div style="display: flex; flex-wrap: nowrap; justify-content: space-between;">
+        <a href="https:&#x2F;&#x2F;frozenpizzastudios.com&#x2F;blog&#x2F;building-a-level-builder&#x2F;">
+            <h3 style="margin: 0">Building a Level Builder</h3>
+        </a>
+        <small style="flex-shrink: 0">
+            2025&#x2F;05&#x2F;06
+        </small>
+    </div>
+
+    
+    <p style="margin-bottom: 0">Exploring how and why we plan to automate aspects of our level design process</p>
+    
+</article>
+
+<article>
+    
+    
+    <div style="display: flex; flex-wrap: nowrap; justify-content: space-between;">
+        <a href="https:&#x2F;&#x2F;frozenpizzastudios.com&#x2F;blog&#x2F;starting-a-blog&#x2F;">
+            <h3 style="margin: 0">Starting a blog</h3>
+        </a>
+        <small style="flex-shrink: 0">
+            2025&#x2F;04&#x2F;10
+        </small>
+    </div>
+
+    
+    <p style="margin-bottom: 0">We&#x27;re also starting work on our next game 👀</p>
+    
+</article>
+
+
+</div>
+
+    </main>
+    <footer>
+        <div style="margin-bottom: 0.5em">
+        
+            <a
+                href="https:&#x2F;&#x2F;store.steampowered.com&#x2F;curator&#x2F;42947587"
+                target="_blank"
+                title="steam"
+                style="text-decoration: none; margin-left: 0.25em">
+                <img src="/icons/steam.svg" width="28px"/>
+            </a>
+        
+            <a
+                href="https:&#x2F;&#x2F;x.com&#x2F;frozenzastudios"
+                target="_blank"
+                title="x"
+                style="text-decoration: none; margin-left: 0.25em">
+                <img src="/icons/x.svg" width="28px"/>
+            </a>
+        
+            <a
+                href="https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UChQcrZDU9D5o7C5vbkbcciA"
+                target="_blank"
+                title="youtube"
+                style="text-decoration: none; margin-left: 0.25em">
+                <img src="/icons/youtube.svg" width="28px"/>
+            </a>
+        
+            <a
+                href="https:&#x2F;&#x2F;www.tiktok.com&#x2F;@frozenzastudios"
+                target="_blank"
+                title="tiktok"
+                style="text-decoration: none; margin-left: 0.25em">
+                <img src="/icons/tiktok.svg" width="28px"/>
+            </a>
+        
+            <a
+                href="mailto:frozenpizzastudios@gmail.com"
+                target="_blank"
+                title="email"
+                style="text-decoration: none; margin-left: 0.25em">
+                <img src="/icons/email.svg" width="28px"/>
+            </a>
+        
+        </div>
+        &copy;2023&ndash;2025 Frozen Pizza Studios, LLC
+    </footer>
+    
+    
+<script>
+    let everythingElse = document.getElementsByClassName("animation-disableable");
+    let animationsSkipped = false;
+    window.onscroll = function() {
+        if (animationsSkipped) return;
+
+        if (window.scrollY > 0) {
+            for (const e of everythingElse) {
+                e.classList.add("disable-animation");
+            }
+
+            animationsSkipped = true;
+        }
+    };
+</script>
+
+</body>
+</html>

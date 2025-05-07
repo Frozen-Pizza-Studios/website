@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/simple.rev8640699.min.css">
+    <link rel="stylesheet" href="/custom.css">
+    <style>
+        :root {
+            /* Override default fonts */
+            --sans-font: 'Lato', sans-serif;
+            --mono-font: Consolas, Menlo, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+            /* Make background color be same as video */
+            --bg: #181818;
+            /* Force dark mode, even if user prefers light:
+            https://github.com/kevquirk/simple.css/wiki/Getting-Started-With-Simple.css#use-dark-or-light-mode-only
+            */
+            color-scheme: dark;
+            --accent-bg: #232323;
+            --text: #dcdcdc;
+            --text-light: #ababab;
+            --accent: #ffb300;
+            --accent-hover: #ffe099;
+            --accent-text: var(--bg);
+            --code: #f06292;
+            --preformatted: #ccc;
+            --disabled: #111;
+        }
+        /* We like thicc headers */
+        h1, h2 {
+            font-weight: 900;
+        }
+        footer {
+            text-align: center;
+        }
+    </style>
+    
+    <title>
+        
+Building a Level Builder | Frozen Pizza Studios
+
+    </title>
+</head>
+<body>
+    <main>
+        
+<h1>Building a Level Builder</h1>
+<small style="display: block; margin-bottom: 1em;">
+    2025&#x2F;05&#x2F;06 · 5mins
+    
+    ·
+    
+    <a href="/tags/writing" style="padding-right: 0.25em">#writing</a>
+    
+    <a href="/tags/devlog" style="padding-right: 0.25em">#devlog</a>
+    
+
+</small>
+
+<p><em>Feel free to <a href="https://frozenpizzastudios.com/blog/building-a-level-builder/#continue">skip ahead</a> if you don't care about "the why."</em></p>
+<h2 id="motivation">Motivation</h2>
+<p>When programming, I often struggle to choose between planning ahead, or just focusing on the here and now.  I don't want to over-engineer or abstract prematurely, but I also don't want to be short-sighted.</p>
+<p>I've got one of these decisions on my hands right now:</p>
+<p>I'm in the early stages of planning a level builder system for Frozen Pizza Studios' next title.  To be clear, we don't plan to expose this tool to players (at least not yet).  So what we actually need is <em>levels</em>, and we while we <em>could</em> build a level builder as a stepping stone, that is not strictly required.</p>
+<p>Then it's worth asking whether the level builder will <em>actually save more time than it will cost to build it.</em>  The following xkcd comics also come to mind:</p>
+<ul>
+<li><a href="https://www.xkcd.com/974/">The General Problem</a></li>
+<li><a href="https://xkcd.com/1205/">Is it Worth the Time?</a></li>
+<li><a href="https://xkcd.com/1319/">Automation</a></li>
+</ul>
+<p>Total time spent is not necessarily the only factor to consider though.  We value other things, such as:</p>
+<ul>
+<li><strong>Flexibility</strong>: it should be easy to change and iterate on level designs</li>
+<li><strong>Consistency</strong>: levels should feel cohesive (although not too "cookie-cutter")</li>
+</ul>
+<p>With that in mind, we might visualize the decision space more like this:</p>
+<pre data-lang="mermaid" style="background-color:#2b303b;color:#c0c5ce;" class="language-mermaid "><code class="language-mermaid" data-lang="mermaid"><span>quadrantChart
+</span><span>  title Should I build that feature?
+</span><span>  x-axis Quick --&gt; Time-consuming
+</span><span>  y-axis Low value --&gt; High value
+</span><span>  quadrant-1 Risky plan
+</span><span>  quadrant-2 Good plan
+</span><span>  quadrant-3 Doesn&#39;t hurt to try
+</span><span>  quadrant-4 Bad plan
+</span></code></pre>
+<p>However, "value" can be difficult to quantify and predict.  I <em>think</em> the level builder will be useful and a net positive for the game dev process, but I don't know for certain.  "Time consuming" is also a relative term — it depends on how urgently you need to meet other goals.  Thus it may also be useful to consider the following:</p>
+<pre data-lang="mermaid" style="background-color:#2b303b;color:#c0c5ce;" class="language-mermaid "><code class="language-mermaid" data-lang="mermaid"><span>quadrantChart
+</span><span>  title Should I still build that feature?
+</span><span>  x-axis Plenty of time --&gt; Short on time
+</span><span>  y-axis Uncertain value --&gt; Definite value
+</span><span>  quadrant-1 Plan for it soon
+</span><span>  quadrant-2 Go for it
+</span><span>  quadrant-3 Research first
+</span><span>  quadrant-4 Postpone indefinitely
+</span></code></pre>
+<p>We also can't forget we humans only have finite time on this planet.  What is valuable in a business sense is sometimes (often) at odds with "living one's best life."  Don't discount what you enjoy just because it isn't profitable.</p>
+<p>(I swear this is my last quadrant chart)</p>
+<pre data-lang="mermaid" style="background-color:#2b303b;color:#c0c5ce;" class="language-mermaid "><code class="language-mermaid" data-lang="mermaid"><span>quadrantChart
+</span><span>  title Spending time
+</span><span>  x-axis Boring / Torture --&gt; Interesting / Fun
+</span><span>  y-axis Unprofitable --&gt; Profitable
+</span><span>  quadrant-1 Aim here
+</span><span>  quadrant-2 Sometimes necessary
+</span><span>  quadrant-3 Avoid
+</span><span>  quadrant-4 Not a bad place to be
+</span></code></pre>
+<p>As you probably pieced together from the title, I've already decided to pursue a level builder system.  I have reason to believe it will be valuable, I'm not in a rush, and I think it will be interesting.</p>
+<div id="continue"></div>
+<h2 id="inspiration">Inspiration</h2>
+<p>I'm quite intrigued by <a href="https://x.com/OskSta">Oskar Stålberg</a>'s approach to procedural content generation.  If you're not familiar, he's the creator of <a href="https://store.steampowered.com/app/1291340/Townscaper/">Townscaper</a>, a small sandbox game in which you create cute island towns.  Here's a small taste:</p>
+<blockquote class="twitter-tweet" data-media-max-width="560" data-dnt="true"><p lang="en" dir="ltr">I needed some more greenery, so now if you build an enclosed area it becomes a backyard! <a href="https://t.co/IOjFOPqKZv">pic.twitter.com/IOjFOPqKZv</a></p>&mdash; Oskar Stålberg (@OskSta) <a href="https://twitter.com/OskSta/status/1238474550511308800?ref_src=twsrc%5Etfw">March 13, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+<p>The game does several things quite well.  The first is that it's incredibly easy to be productive.  Aside from customizing the colors of your buildings, all you do is left click on building faces to extend them, and right click to shrink/delete them.  That's it.</p>
+<p>Behind the scenes, there's an algorithm that decides whether the blocks you place require stairs to navigate, what angles the roofs should be, whether a segment requires extra structural support, where doors and windows should be, etc.  There's no need to bother the player with these details.</p>
+<p>The other thing it does very well is producing towns that look organic and hand-crafted.  The game uses an irregular grid, which forces the geometry to stretch and distort in ways that it wouldn't have to if it were on a regular repeating grid.  This alone does most of the heavy lifting, but the randomized decorative elements also go a long way.</p>
+<h2 id="what-we-want-for-our-level-builder">What we want for our level builder</h2>
+<p>I'm not sure how closely we want to replicate Townscaper's approach, but it's a good reference point.  Not too different from Townscaper, we intend to create an urban environment with interesting buildings.</p>
+<h3 id="finer-control-without-hurting-productivity">Finer control without hurting productivity</h3>
+<p>Our gameplay takes place on motor scooters, which means we will likely need fine control over the shapes of roads and terrain.  A grid-based approach (regular or irregular) may be incompatible with the level of control we'll need.</p>
+<p>However, I think we'll still be able to automate the placement of things like sidewalks, crosswalks, traffic signals, turn lanes, parking spaces, etc.</p>
+<h3 id="interior-spaces-and-customizations">Interior spaces and customizations</h3>
+<p>We are debating how much we want to allow the players to go inside buildings and interact with them.  Extending the level builder to interior spaces would certainly increase its complexity.  Regardless, it will be imperative that we give ourselves "escape hatches" where we can tell the builder to place pre-fabricated objects or otherwise customize the generated output by hand.</p>
+<h3 id="looks-good-out-of-the-box">Looks good out of the box</h3>
+<p>As much as possible, I want the generated output to feel polished and only need minimal customizations.  Townscaper is proof to me that this is possible, but whether we'll be able to automate it remains to be seen.  I do think it's worth attempting though, because it will save on the very limited budget we have to hire an artist.</p>
+<h2 id="next-steps">Next steps</h2>
+<p>I've been ramping up on Godot in my spare time (coming from Unity), learning about mesh generation and editor plugins.  I needed to develop a clear vision and justification for this level builder before getting too deep, which is what this article is meant to achieve.</p>
+<p>I hope to have a development update in the coming weeks... or months.  It's almost summertime after all, and I'm not going to spend <em>all</em> of it indoors 😎</p>
+
+
+<nav class="custom">
+    
+    <a href="https:&#x2F;&#x2F;frozenpizzastudios.com&#x2F;blog&#x2F;starting-a-blog&#x2F;">
+        <span>←</span>
+        Starting a blog
+    </a>
+    
+    <a href="/">Home</a>
+    <a href="/blog">All Posts</a>
+    <span style="flex-grow: 1"></span>
+    
+</nav>
+
+    </main>
+    <footer>
+        <div style="margin-bottom: 0.5em">
+        
+            <a
+                href="https:&#x2F;&#x2F;store.steampowered.com&#x2F;curator&#x2F;42947587"
+                target="_blank"
+                title="steam"
+                style="text-decoration: none; margin-left: 0.25em">
+                <img src="/icons/steam.svg" width="28px"/>
+            </a>
+        
+            <a
+                href="https:&#x2F;&#x2F;x.com&#x2F;frozenzastudios"
+                target="_blank"
+                title="x"
+                style="text-decoration: none; margin-left: 0.25em">
+                <img src="/icons/x.svg" width="28px"/>
+            </a>
+        
+            <a
+                href="https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UChQcrZDU9D5o7C5vbkbcciA"
+                target="_blank"
+                title="youtube"
+                style="text-decoration: none; margin-left: 0.25em">
+                <img src="/icons/youtube.svg" width="28px"/>
+            </a>
+        
+            <a
+                href="https:&#x2F;&#x2F;www.tiktok.com&#x2F;@frozenzastudios"
+                target="_blank"
+                title="tiktok"
+                style="text-decoration: none; margin-left: 0.25em">
+                <img src="/icons/tiktok.svg" width="28px"/>
+            </a>
+        
+            <a
+                href="mailto:frozenpizzastudios@gmail.com"
+                target="_blank"
+                title="email"
+                style="text-decoration: none; margin-left: 0.25em">
+                <img src="/icons/email.svg" width="28px"/>
+            </a>
+        
+        </div>
+        &copy;2023&ndash;2025 Frozen Pizza Studios, LLC
+    </footer>
+    
+    <script type="module">
+        import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: "dark",
+        });
+        await Promise.all(
+            Array.from(
+                document.querySelectorAll("pre.language-mermaid")
+            )
+            .map((block, i) => {
+                return mermaid
+                    .render(`mermaid-${i}`, block.innerText)
+                    .then(({ svg }) => {
+                        block.outerHTML = svg;
+                    })
+            })
+        );
+    </script>
+    
+    
+</body>
+</html>
