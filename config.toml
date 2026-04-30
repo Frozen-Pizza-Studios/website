@@ -28,5 +28,9 @@ name = "email"
 url = "mailto:frozenpizzastudios@gmail.com"
 
 [[extra.steam_games]]
+name = "Delivery Derby"
+widget_id = "4615650"
+
+[[extra.steam_games]]
 name = "Bowling Hills"
 widget_id = "2125190"

@@ -143,13 +143,14 @@ iframe {
 </div>
 
 <div class="animation-disableable fade-in">
-    <div style="margin-bottom: 1em">
+    <div>
         {% for game in config.extra.steam_games %}
         <iframe
             src="https://store.steampowered.com/widget/{{ game.widget_id }}/?utm_source=fps-website"
             frameborder="0"
             width="650"
-            height="190">
+            height="190"
+            style="margin-bottom: 1em">
         </iframe>
         {% endfor %}
     </div>
