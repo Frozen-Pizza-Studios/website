@@ -1,7 +1,7 @@
 # Frozen Pizza Studios Website
 
 ## Quick Start
-- Install [Zola](https://www.getzola.org/documentation/getting-started/installation/)
+- Install [Zola](https://www.getzola.org/documentation/getting-started/installation/) v0.22
 - `zola serve --open` to preview the site locally as you work
 
 ## Post Formatting

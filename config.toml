@@ -8,18 +8,21 @@ taxonomies = [
 compile_sass = false
 generate_feeds = false
 
-[markdown]
-highlight_code = true
-
 [[extra.social]]
 name = "steam"
 url = "https://store.steampowered.com/curator/42947587"
 [[extra.social]]
-name = "x"
-url = "https://x.com/frozenzastudios"
+name = "bluesky"
+url = "https://bsky.app/profile/frozenpizzastudios.bsky.social"
+[[extra.social]]
+name = "instagram"
+url = "https://www.instagram.com/frozenpizzastudios/"
 [[extra.social]]
 name = "youtube"
 url = "https://www.youtube.com/channel/UChQcrZDU9D5o7C5vbkbcciA"
+[[extra.social]]
+name = "x"
+url = "https://x.com/frozenzastudios"
 [[extra.social]]
 name = "tiktok"
 url = "https://www.tiktok.com/@frozenzastudios"

@@ -69,13 +69,13 @@
         });
         await Promise.all(
             Array.from(
-                document.querySelectorAll("pre.language-mermaid")
+                document.querySelectorAll("code[data-lang=\"mermaid\"]")
             )
             .map((block, i) => {
                 return mermaid
                     .render(`mermaid-${i}`, block.innerText)
                     .then(({ svg }) => {
-                        block.outerHTML = svg;
+                        block.parentNode.outerHTML = svg;
                     })
             })
         );
