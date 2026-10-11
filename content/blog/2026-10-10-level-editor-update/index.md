@@ -1,7 +1,6 @@
 ---
 title: Dynamic Road Mesh Generation
 description: An update on Delivery Derby's level editor tooling
-draft: true
 extra:
   mermaid: true
 taxonomies:
@@ -10,7 +9,7 @@ taxonomies:
 
 In the [last post](../building-a-level-builder/), I described my aspirations for our next game's level builder, promising an update in the following "weeks or months."  Well today I'm back, and... wait, what _year_ is it?!
 
-A lot has changed over the last 17 months!  The game is now officially called [Delivery Derby](https://store.steampowered.com/app/4615650/Delivery_Derby/?snr=1_5_1100__1100&utm_source=fps-website) (wishlist on Steam 🙏), we've significantly fleshed out the gameplay and design, got some music tracks [professionally produced](https://www.matteopalmermusic.com/), showed a demo at [2D Con 2026](https://www.2dcon.net/indie-games/indie-island/), and have professional game art in the works.
+A lot has changed over the past 17 months!  The game is now officially called [Delivery Derby](https://store.steampowered.com/app/4615650/Delivery_Derby/?snr=1_5_1100__1100&utm_source=fps-website) (wishlist on Steam 🙏), we've significantly fleshed out the gameplay and design, got some music tracks [professionally produced](https://www.matteopalmermusic.com/), showed a demo at [2D Con 2026](https://www.2dcon.net/indie-games/indie-island/), and have professional game art in the works.
 
 But more on all that some other time.  Today, I just want to share the progress I've made on level editor tooling.  It has been quite a journey!
 
@@ -79,7 +78,7 @@ This ring tracing code also ended up being useful for quickly generating buildin
 ![early buildings](buildings.png)
 
 ## Refining the road editor
-Needing a break from these experiments, I shifted my focus back to the road system.  This code badly needed refactoring and the editor experience was still lacking.  This is when I learned how to make Godot editor gizmo plugins, which was used to simplify making node selections and connections:
+Needing a break from these experiments, I shifted my focus back to the road system.  This code badly needed refactoring and the editor experience was still lacking.  This is when I learned how to make Godot editor gizmo plugins, which simplified making node selections and connections:
 
 ![connection gizmos](connection-gizmos.gif)
 
@@ -92,11 +91,11 @@ Until this point, relatively little work had gone into texturing, so that was my
 
 ![road textures bird's eye view](road-texture0.png)
 
-I used free textures from [Poliigon](https://www.poliigon.com/) for the visual base, and layered in the painted lines procedurally.  The painted look is achieved by simply overriding the albedo value with a solid color.  Paint is threshold-masked against the ambient occlusion map to simulate weathering.
+I used free textures from [Poliigon](https://www.poliigon.com/) for the visual base, and layered in the painted lines procedurally.  The painted look is achieved by overriding the albedo value with a solid color, and using a threshold-mask based on the ambient occlusion map to simulate weathering.
 
 ![road texture up close](road-texture1.png)
 
-The fragment shader has to calculate whether each pixel of road is painted or unpainted.  Because I used world-space XZ coordinates for texture sampling, the UV1 channel was free to be repurposed for "road-space" coordinates: distance along the length of the road, and distance from the center of the road.  That's almost enough for the fragment shader to work, but it also needs to know the road's configuration (how many lanes, width of center divider, whether a lane transition is happening, etc.), which I encoded into the unused vertex color channel.
+The fragment shader has to calculate whether each pixel of road is painted or unpainted.  Because I used world-space XZ coordinates for texture sampling, the UV1 channel was free to be repurposed for "road-space" coordinates: distance from the center of the road, and distance along the length of the road.  That's almost enough for the fragment shader to work, but it also needs to know the road's configuration (how many lanes, width of center divider, whether a lane transition is happening, etc.), which I encoded into the unused vertex color channel.
 
 This was enough to derive center lines, dashed lane separators, shoulder lines...
 
@@ -137,11 +136,38 @@ Lastly, I needed a way to handle dead ends, so I added culdesacs (with configura
 ![culdesac](culdesac.png)
 
 ## Attempted terrain refinements
-- https://github.com/Frozen-Pizza-Studios/delivery-derby-godot/pull/38 (discord has gifs)
-- https://github.com/Frozen-Pizza-Studios/delivery-derby-godot/pull/40
-- https://github.com/Frozen-Pizza-Studios/delivery-derby-godot/pull/55
+As mentioned earlier, the terrain system would eventually be shelved, but there were a few things we tried before reaching that conclusion.  First, I wanted to make the terrain smoother.  Off-the-shelf triangulators weren't doing a great job, so tried my own algorithm that was ultimately a dead-end, but it resulted in some mesmerizing debug visuals:
+
+![terrain smoothing debug visuals](terrain-debug.gif)
+
+Another issue with the terrain system was that all output was sloped and smooth -- no way to have cliff faces, which emerged as a level design necessity.  Before giving up on the terrain system entirely, I tried hacking in a manual cliff face editor.  The hope was that manually placing cliffs would give just enough control over the terrain without having to fully specify everything.  And because cliff faces could be thought of as near-vertical rings, they could fit right in to the terrain triangulation system with minimal refactoring:
+
+![cliff editor](cliff-editor.gif)
+
+The cliff editor ended up being too painful to work with, but it did technically accommodate what we wanted to create at the time:
+
+![cliff editor output](cliff-output.png)
+
+It was at this point that we decided to cut our losses with terrain generation.  We could make what we needed by hand in Blender, and just generate banks off the sides of the roads to make some wiggle room for manual placement:
+
+![road banks](banks.png)
+
+We could also hide the seam very effectively just by forcing the bank normals to point straight up.  Despite the slope, you really can't see the seam between the banks and ground plane at all:
+
+![seamless road banks](seamless-terrain.png)
 
 ## Traffic system
-- https://github.com/Frozen-Pizza-Studios/delivery-derby-godot/pull/61
-- https://github.com/Frozen-Pizza-Studios/delivery-derby-godot/pull/65
-- https://github.com/Frozen-Pizza-Studios/delivery-derby-godot/pull/68 (find or make gifs for this)
+The road editor system was already useful to us, but adding traffic is when it really started to shine.  Manually placing these paths would have been a huge pain:
+
+![car path closeup](car0.png)
+![complex car paths](car1.png)
+
+The roads carry enough semantic information to generate all possible path segments for cars to follow, as well as metadata useful for traffic control (intersecting paths, merging/diverging paths).  These fixed paths and metadata keeps the car behavior relatively simple:
+- When a car reaches a fork, it just chooses the next connected path at random (any choice is valid)
+- Collision avoidance doesn't require any physics or spatial processing -- it's more efficient to just check the relative positions of the handful of cars on relevant paths
+- Intersections can be easily controlled by toggling open/closed states of different paths
+
+## Conclusion
+And with that, you've reached the current day.  I'm sure we'll add more road features in the future, but for now we're focusing on other priorities.  Hopefully the next update will be sooner than 17 months 😄
+
+If you'd like to support Delivery Derby, consider [wishlisting it on Steam](https://store.steampowered.com/app/4615650/Delivery_Derby/?snr=1_5_1100__1100&utm_source=fps-website), following us on social media (links below), and telling your friends!
