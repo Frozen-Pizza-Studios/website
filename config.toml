@@ -15,17 +15,21 @@ url = "https://store.steampowered.com/curator/42947587"
 name = "bluesky"
 url = "https://bsky.app/profile/frozenpizzastudios.bsky.social"
 [[extra.social]]
-name = "instagram"
-url = "https://www.instagram.com/frozenpizzastudios/"
-[[extra.social]]
-name = "youtube"
-url = "https://www.youtube.com/channel/UChQcrZDU9D5o7C5vbkbcciA"
-[[extra.social]]
 name = "x"
 url = "https://x.com/frozenzastudios"
 [[extra.social]]
+name = "instagram"
+url = "https://www.instagram.com/frozenpizzastudios/"
+[[extra.social]]
 name = "tiktok"
 url = "https://www.tiktok.com/@frozenzastudios"
+[[extra.social]]
+name = "youtube"
+url = "https://www.youtube.com/channel/UChQcrZDU9D5o7C5vbkbcciA"
+# TODO
+# [[extra.social]]
+# name = "discord"
+# url = ""
 [[extra.social]]
 name = "email"
 url = "mailto:frozenpizzastudios@gmail.com"

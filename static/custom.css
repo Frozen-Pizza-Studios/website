@@ -45,3 +45,7 @@ nav.custom a[aria-current="true"] {
     color: var(--accent);
     cursor: pointer;
 }
+
+strong {
+    font-weight: 900;
+}
