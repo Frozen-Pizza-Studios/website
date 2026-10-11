@@ -168,6 +168,8 @@ The roads carry enough semantic information to generate all possible path segmen
 - Intersections can be easily controlled by toggling open/closed states of different paths
 
 ## Conclusion
-And with that, you've reached the current day.  I'm sure we'll add more road features in the future, but for now we're focusing on other priorities.  Hopefully the next update will be sooner than 17 months 😄
+And with that, we've reached the state of the present day.  I'm sure we'll add more road features in the future, but for now we're focusing on other priorities.  Hopefully the next update will be sooner than 17 months 😄
+
+![present day](present-day.png)
 
 If you'd like to support Delivery Derby, consider [wishlisting it on Steam](https://store.steampowered.com/app/4615650/Delivery_Derby/?snr=1_5_1100__1100&utm_source=fps-website), following us on social media (links below), and telling your friends!
