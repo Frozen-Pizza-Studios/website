@@ -55,7 +55,7 @@ However, a road's profile can change over its length, such as when lanes or cent
 
 ![road profiles](profiles.png)
 
-I would improve upon this later, but first we sorely needed intersections to have a functioning road system.  Intersections don't fit the "play-doh extruder" mental model, which made them a bit harder to implement.  As a first pass, I just ignored the corner geometry:
+I would improve upon this later, but first we sorely needed intersections to have a functioning road system.  Intersections don't fit the "play-doh extruder" mental model, which made them a bit harder to implement.  For the first pass, I just ignored the corner geometry:
 
 ![first intersection](first-intersection.gif)
 
@@ -92,13 +92,13 @@ Until this point, relatively little work had gone into texturing, so that was my
 
 ![road textures bird's eye view](road-texture0.png)
 
-I used free textures from [Poliigon](https://www.poliigon.com/) for the visual base, and layered in the painted lines procedurally.  The painted look is achieved by simply overriding the albedo value with a solid color.  Paint is threshold-masked against the albedo map to simulate weathering.
+I used free textures from [Poliigon](https://www.poliigon.com/) for the visual base, and layered in the painted lines procedurally.  The painted look is achieved by simply overriding the albedo value with a solid color.  Paint is threshold-masked against the ambient occlusion map to simulate weathering.
 
 ![road texture up close](road-texture1.png)
 
-The fragment shader calculates whether each pixel is painted or unpainted, using minimal data passed in through the UV1 coordinates and vertex color channels (which were otherwise not used because texture sampling is driven by world-space XZ coordinates).
+The fragment shader has to calculate whether each pixel of road is painted or unpainted.  Because I used world-space XZ coordinates for texture sampling, the UV1 channel was free to be repurposed for "road-space" coordinates: distance along the length of the road, and distance from the center of the road.  That's almost enough for the fragment shader to work, but it also needs to know the road's configuration (how many lanes, width of center divider, whether a lane transition is happening, etc.), which I encoded into the unused vertex color channel.
 
-Only a handful of floats per vertex was enough to derive center lines, dashed lane separators, shoulder lines...
+This was enough to derive center lines, dashed lane separators, shoulder lines...
 
 ![road lines example 1](road-texture2.png)
 
@@ -110,8 +110,31 @@ Only a handful of floats per vertex was enough to derive center lines, dashed la
 
 ![road lines example 3](road-texture4.png)
 
-- https://github.com/Frozen-Pizza-Studios/delivery-derby-godot/pull/30
-- https://github.com/Frozen-Pizza-Studios/delivery-derby-godot/pull/56
+Happy with the road lines, I turned my attention to the road's periphery.  Pretty much all curbs where I live are combined with a gutter, so I added those:
+
+![standard barrier curbs](curb0.png)
+
+This is also when I learned that curbs come in many shapes and sizes.  The curbs most people think of (above) are called "barrier curbs," but many residential areas have "rolled curbs," so I added those as well:
+
+![rolled curbs](curb1.png)
+
+With two different curb shapes, we also needed a way to transition between the two.  Luckily, real life had examples to take inspiration from.  I'm quite happy with how it turned out:
+
+![curb transition](curb2.png)
+
+Similar to curbs, I added two styles of sidewalks: "city style" that are directly adjacent to the curb, and "residential style" that have some green space between them and the road.
+
+![city sidewalk](sidewalk-city.png)
+![city residential](sidewalk-residential.png)
+
+I was down to edge cases at this point.  One that I had procrastinated solving was center divider transitions, because like intersections, they don't fit the play-doh extruder mental model.  Some ugly code was required to make these work:
+
+![raised divider to none](center0.png)
+![flat divider to raised divider](center1.png)
+
+Lastly, I needed a way to handle dead ends, so I added culdesacs (with configurable radii):
+
+![culdesac](culdesac.png)
 
 ## Attempted terrain refinements
 - https://github.com/Frozen-Pizza-Studios/delivery-derby-godot/pull/38 (discord has gifs)
