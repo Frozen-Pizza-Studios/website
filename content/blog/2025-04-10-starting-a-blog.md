@@ -3,6 +3,7 @@ title: Starting a blog
 description: We're also starting work on our next game 👀
 taxonomies:
   tags: ["writing"]
+  authors: ["Tanner Nielsen"]
 ---
 
 We are Frozen Pizza Studios and we are starting a blog!

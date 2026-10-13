@@ -3,35 +3,32 @@
 {% block main %}
 <div class="h-with-nav">
     <h1>{{ taxonomy.name | title }}</h1>
-    <nav>
-        <a href="/blog">All Posts</a>
-        <a href="/">Home</a>
-    </nav>
+    {% include "post_search_nav.html" %}
 </div>
 {% for term in terms %}
-<article>
-    <h3>
-        <a href="{{ term.permalink }}">#{{ term.name }}</a>
-        <sup>{{ term.page_count }}</sup>
-    </h3>
+<h3>
+    <a href="{{ term.permalink }}">
+        {% if taxonomy.name == "tags" %}#{% endif %}{{ term.name }}
+    </a>
+    <sup>{{ term.page_count }}</sup>
+</h3>
 
-    <ul>
-        {% for page in term.pages | slice(end=5) %}
-        <li>
-            <a href="{{ page.permalink }}">
-                {{ page.title }}
-            </a>
-        </li>
-        {% endfor %}
-    
-        {% if term.pages | length > 5 %}
-        <li>
-            <a href="{{ term.permalink }}">
-                More...
-            </a>
-        </li>
-        {% endif %}
-    </ul>
-</article>
+<ul>
+    {% for page in term.pages | slice(end=5) %}
+    <li>
+        <a href="{{ page.permalink }}">
+            {{ page.title }}
+        </a>
+    </li>
+    {% endfor %}
+
+    {% if term.pages | length > 5 %}
+    <li>
+        <a href="{{ term.permalink }}">
+            More...
+        </a>
+    </li>
+    {% endif %}
+</ul>
 {% endfor %}
 {% endblock main %}

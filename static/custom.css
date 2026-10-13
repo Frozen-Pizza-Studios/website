@@ -19,6 +19,9 @@ nav.custom,
     line-height: 2;
     padding: 1rem 0 0 0;
 }
+.h-with-nav nav {
+    padding: 1rem 0 0 1rem;
+}
 
 .h-with-nav nav a,
 .h-with-nav nav a:visited,

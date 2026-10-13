@@ -1,0 +1,21 @@
+<nav>
+    <a
+        href="/blog"
+        {% if current_path == "/blog/" %}
+        class="current"
+        {% endif %}
+    >
+        All Posts
+    </a>
+    {% for taxonomy in config.taxonomies %}
+    <a
+        href="/{{ taxonomy.name }}"
+        {% if current_path is starting_with("/" ~ taxonomy.name) %}
+        class="current"
+        {% endif %}
+    >
+        {{ taxonomy.name | title }}
+    </a>
+    {% endfor %}
+    <a href="/">Home</a>
+</nav>

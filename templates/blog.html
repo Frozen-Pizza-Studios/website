@@ -7,10 +7,7 @@ Blog | {{ config.title }}
 {% block main %}
 <div class="h-with-nav">
     <h1>{{ section.title }}</h1>
-    <nav>
-        <a href="/tags">Tags</a>
-        <a href="/">Home</a>
-    </nav>
+    {% include "post_search_nav.html" %}
 </div>
 
 {% for year, posts in section.pages | group_by(attribute="year") %}

@@ -5,6 +5,7 @@ extra:
   mermaid: true
 taxonomies:
   tags: ["writing", "devlog"]
+  authors: ["Tanner Nielsen"]
 ---
 
 _Feel free to [skip ahead](#continue) if you don't care about "the why."_

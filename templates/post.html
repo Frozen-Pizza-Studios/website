@@ -5,15 +5,19 @@
 {% endblock %}
 
 {% block main %}
-<h1>{{ page.title }}</h1>
-<small style="display: block; margin-bottom: 1em;">
-    {{ page.date | date(format="%Y/%m/%d") }} · {{ page.reading_time }}mins
-    {% if page.taxonomies %}
+<h1 style="margin-bottom: 0.2em">{{ page.title }}</h1>
+<small style="display: block; margin-bottom: 3em;">
+    by
+    {% for author in page.taxonomies.authors %}
+    <a href="/authors/{{ author | slugify }}" style="padding-right: 0.25em">{{ author }}</a>
+    {% endfor %}
+    on
+    {{ page.date | date(format="%Y/%m/%d") | upper }}
     ·
     {% for tag in page.taxonomies.tags %}
     <a href="/tags/{{ tag }}" style="padding-right: 0.25em">#{{ tag }}</a>
     {% endfor %}
-{% endif %}
+    · {{ page.reading_time }}mins
 </small>
 
 {{ page.content | safe }}

@@ -5,6 +5,7 @@ extra:
   mermaid: true
 taxonomies:
   tags: ["devlog"]
+  authors: ["Tanner Nielsen"]
 ---
 
 In the [last post](../building-a-level-builder/), I described my aspirations for our next game's level builder, promising an update in the following "weeks or months."  Well today I'm back, and... wait, what _year_ is it?!
