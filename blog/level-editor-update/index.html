@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/simple.rev8640699.min.css">
+    <link rel="stylesheet" href="/custom.css">
+    <style>
+        :root {
+            /* Override default fonts */
+            --sans-font: 'Lato', sans-serif;
+            --mono-font: Consolas, Menlo, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+            /* Make background color be same as video */
+            --bg: #181818;
+            /* Force dark mode, even if user prefers light:
+            https://github.com/kevquirk/simple.css/wiki/Getting-Started-With-Simple.css#use-dark-or-light-mode-only
+            */
+            color-scheme: dark;
+            --accent-bg: #232323;
+            --text: #dcdcdc;
+            --text-light: #ababab;
+            --accent: #ffb300;
+            --accent-hover: #ffe099;
+            --accent-text: var(--bg);
+            --code: #f06292;
+            --preformatted: #ccc;
+            --disabled: #111;
+        }
+        /* We like thicc headers */
+        h1, h2 {
+            font-weight: 900;
+        }
+        footer {
+            text-align: center;
+        }
+    </style>
+    
+    <title>
+        
+Dynamic Road Mesh Generation | Frozen Pizza Studios
+
+    </title>
+</head>
+<body>
+    <main>
+        
+<h1 style="margin-bottom: 0.2em">Dynamic Road Mesh Generation</h1>
+<small style="display: block; margin-bottom: 3em;">
+    by
+    
+    <a href="/authors/tanner-nielsen" style="padding-right: 0.25em">Tanner Nielsen</a>
+    
+    on
+    2026&#x2F;10&#x2F;10
+    ·
+    
+    <a href="/tags/devlog" style="padding-right: 0.25em">#devlog</a>
+    
+    · 10mins
+</small>
+
+<p>In the <a href="../building-a-level-builder/">last post</a>, I described my aspirations for our next game's level builder, promising an update in the following "weeks or months."  Well today I'm back, and... wait, what <em>year</em> is it?!</p>
+<p>A lot has changed over the past 17 months!  The game is now officially called <a rel="external" href="https://store.steampowered.com/app/4615650/Delivery_Derby/?snr=1_5_1100__1100&amp;utm_source=fps-website">Delivery Derby</a> (wishlist on Steam 🙏), we've significantly fleshed out the gameplay and design, got some music tracks <a rel="external" href="https://www.matteopalmermusic.com/">professionally produced</a>, showed a demo at <a rel="external" href="https://www.2dcon.net/indie-games/indie-island/">2D Con 2026</a>, and have professional game art in the works.</p>
+<p>But more on all that some other time.  Today, I just want to share the progress I've made on level editor tooling.  It has been quite a journey!</p>
+<h2 id="from-humble-beginnings">From humble beginnings</h2>
+<p>Before attempting to hand-roll everything, I briefly explored Godot's builtin <code>Path3D</code> as the basis for road shapes, but it quickly became apparent that Bézier curves have too many degrees of freedom.  I just wanted to place a few nodes and have a logical, smooth road automatically connect the dots.  After some experimentation, I landed on this approach:</p>
+<video width="640" height="360" autoplay loop muted playsinline>
+  <source src="poc.mp4" type="video/mp4">
+  Your browser does not support the video tag
+</video>
+<p>These curves are a combination of <a rel="external" href="https://www.ryanjuckett.com/biarc-interpolation/">biarcs</a> and <a rel="external" href="https://en.wikipedia.org/wiki/Dubins_path">Dubins paths</a>, which both have desirable properties but neither is usable on its own:</p>
+<ul>
+<li><strong>Biarcs</strong> have a smooth, pleasing shape most of the time.  But they do not respect a minimum turn radius, and under certain conditions generate paths that are WAY too long (see interactive demo in biarcs link above).</li>
+<li><strong>Dubins paths</strong> respect a minimum turn radius and guarantee an optimal path.  However, the shortest possible path is not always the smoothest or best looking.</li>
+</ul>
+<p>The simple solution was to generate a biarc by default, but if it turns too sharply or is too long, fallback to Dubins.  You can see this fallback behavior in the video above (when the road snaps suddenly).</p>
+<h2 id="improving-editor-support">Improving editor support</h2>
+<p>Happy with the proof of concept, it was time to make the tool more usable.  Wiring up nodes by hand seemed too tedious for rapid level prototyping, so I added some editor buttons to speed up common operations:</p>
+<h3 id="append">Append</h3>
+<p>Create a new node a few meters away from your selection, and wire up the connection.</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/append.gif" alt="editor append button" /></p>
+<h3 id="insert">Insert</h3>
+<p>Given an existing connection <code>A → B</code>, insert a new node <code>C</code>, disconnecting <code>A</code> and <code>B</code> and wiring up <code>A → C → B</code>.</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/insert.gif" alt="editor insert button" /></p>
+<h3 id="dissolve">Dissolve</h3>
+<p>Opposite of insert.  Given a connection <code>A → B → C</code>, remove node <code>B</code> and reconnect <code>A → C</code>.</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/dissolve.gif" alt="editor dissolve button" /></p>
+<h2 id="better-road-geometry">Better road geometry</h2>
+<p>Next it was time to move beyond flat road surfaces.  My plan was to generate geometry using 2D profiles that extend along the curves shown above, much like a play-doh extruder:</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/playdoh-extruder.webp" alt="playdoh extruder" /></p>
+<p>However, a road's profile can change over its length, such as when lanes or center dividers are added/removed.  Smoothly transitioning between different road profiles would be a challenge.  This was my first attempt with limited transition support (note the awkward center divider transitions):</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/profiles.png" alt="road profiles" /></p>
+<p>I would improve upon this later, but first we sorely needed intersections to have a functioning road system.  Intersections don't fit the "play-doh extruder" mental model, which made them a bit harder to implement.  For the first pass, I just ignored the corner geometry:</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/first-intersection.gif" alt="first intersection" /></p>
+<p>It took much longer to make smooth intersection corners, but the effort was worth it.  Here's the wireframe view, which I thought was quite satisfying:</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/better-intersection.png" alt="better intersection" /></p>
+<h2 id="terrain-and-building-experiments">Terrain and building experiments</h2>
+<p>You may have noticed green lines in that last screenshot.  That's because as I was wrapping up intersections, I was already moving on to procedural terrain.</p>
+<p>Our grand vision was to have terrain be defined implicitly, <em>entirely in terms of the roads</em>.  The rationale was that our game takes place entirely on roads, so manually designing terrain would be a waste of time.  However, making auto-generated terrain look good turned out to be extraordinarily difficult, eventually leading us to postpone the auto-terrain feature indefinitely.</p>
+<p>That said, a lot of interesting work was done here, and we may need to revisit if we want an in-game level editor in the future.  Here was an early prototype:</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/first-terrain.png" alt="early terrain" /></p>
+<p>At this stage, there was no terrain smoothing.  We simply traced the edges of the road network to form rings, then used an off-the-shelf library to triangulate the rings into polygons.</p>
+<p>This ring tracing code also ended up being useful for quickly generating buildings that fill the space between roads.  This was ultimately scrapped as well, but we did get some use out of it for a couple play test sessions.</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/buildings.png" alt="early buildings" /></p>
+<h2 id="refining-the-road-editor">Refining the road editor</h2>
+<p>Needing a break from these experiments, I shifted my focus back to the road system.  This code badly needed refactoring and the editor experience was still lacking.  This is when I learned how to make Godot editor gizmo plugins, which simplified making node selections and connections:</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/connection-gizmos.gif" alt="connection gizmos" /></p>
+<p>This was a nice compliment to the append/insert/dissolve buttons added previously, especially when choosing which "port" you want to operate on:</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/connection-gizmos2.gif" alt="connection gizmos 2" /></p>
+<h2 id="refining-road-visuals">Refining road visuals</h2>
+<p>Until this point, relatively little work had gone into texturing, so that was my next project:</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/road-texture0.png" alt="road textures bird&#39;s eye view" /></p>
+<p>I used free textures from <a rel="external" href="https://www.poliigon.com/">Poliigon</a> for the visual base, and layered in the painted lines procedurally.  The painted look is achieved by overriding the albedo value with a solid color, and using a threshold-mask based on the ambient occlusion map to simulate weathering.</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/road-texture1.png" alt="road texture up close" /></p>
+<p>The fragment shader has to calculate whether each pixel of road is painted or unpainted.  Because I used world-space XZ coordinates for texture sampling, the UV1 channel was free to be repurposed for "road-space" coordinates: distance from the center of the road, and distance along the length of the road.  That's almost enough for the fragment shader to work, but it also needs to know the road's configuration (how many lanes, width of center divider, whether a lane transition is happening, etc.), which I encoded into the unused vertex color channel.</p>
+<p>This was enough to derive center lines, dashed lane separators, shoulder lines...</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/road-texture2.png" alt="road lines example 1" /></p>
+<p>...diagonal center divider lines...</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/road-texture3.png" alt="road lines example 2" /></p>
+<p>...and even lane transition lines.</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/road-texture4.png" alt="road lines example 3" /></p>
+<p>Happy with the road lines, I turned my attention to the road's periphery.  Pretty much all curbs where I live are combined with a gutter, so I added those:</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/curb0.png" alt="standard barrier curbs" /></p>
+<p>This is also when I learned that curbs come in many shapes and sizes.  The curbs most people think of (above) are called "barrier curbs," but many residential areas have "rolled curbs," so I added those as well:</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/curb1.png" alt="rolled curbs" /></p>
+<p>With two different curb shapes, we also needed a way to transition between the two.  Luckily, real life had examples to take inspiration from.  I'm quite happy with how it turned out:</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/curb2.png" alt="curb transition" /></p>
+<p>Similar to curbs, I added two styles of sidewalks: "city style" that are directly adjacent to the curb, and "residential style" that have some green space between them and the road.</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/sidewalk-city.png" alt="city sidewalk" />
+<img src="https://frozenpizzastudios.com/blog/level-editor-update/sidewalk-residential.png" alt="city residential" /></p>
+<p>I was down to edge cases at this point.  One that I had procrastinated solving was center divider transitions, because like intersections, they don't fit the play-doh extruder mental model.  Some ugly code was required to make these work:</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/center0.png" alt="raised divider to none" />
+<img src="https://frozenpizzastudios.com/blog/level-editor-update/center1.png" alt="flat divider to raised divider" /></p>
+<p>Lastly, I needed a way to handle dead ends, so I added culdesacs (with configurable radii):</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/culdesac.png" alt="culdesac" /></p>
+<h2 id="attempted-terrain-refinements">Attempted terrain refinements</h2>
+<p>As mentioned earlier, the terrain system would eventually be shelved, but there were a few things we tried before reaching that conclusion.  First, I wanted to make the terrain smoother.  Off-the-shelf triangulators weren't doing a great job, so tried my own algorithm that was ultimately a dead-end, but it resulted in some mesmerizing debug visuals:</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/terrain-debug.gif" alt="terrain smoothing debug visuals" /></p>
+<p>Another issue with the terrain system was that all output was sloped and smooth -- no way to have cliff faces, which emerged as a level design necessity.  Before giving up on the terrain system entirely, I tried hacking in a manual cliff face editor.  The hope was that manually placing cliffs would give just enough control over the terrain without having to fully specify everything.  And because cliff faces could be thought of as near-vertical rings, they could fit right in to the terrain triangulation system with minimal refactoring:</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/cliff-editor.gif" alt="cliff editor" /></p>
+<p>The cliff editor ended up being too painful to work with, but it did technically accommodate what we wanted to create at the time:</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/cliff-output.png" alt="cliff editor output" /></p>
+<p>It was at this point that we decided to cut our losses with terrain generation.  We could make what we needed by hand in Blender, and just generate banks off the sides of the roads to make some wiggle room for manual placement:</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/banks.png" alt="road banks" /></p>
+<p>We could also hide the seam very effectively just by forcing the bank normals to point straight up.  Despite the slope, you really can't see the seam between the banks and ground plane at all:</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/seamless-terrain.png" alt="seamless road banks" /></p>
+<h2 id="traffic-system">Traffic system</h2>
+<p>The road editor system was already useful to us, but adding traffic is when it really started to shine.  Manually placing these paths would have been a huge pain:</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/car0.png" alt="car path closeup" />
+<img src="https://frozenpizzastudios.com/blog/level-editor-update/car1.png" alt="complex car paths" /></p>
+<p>The roads carry enough semantic information to generate all possible path segments for cars to follow, as well as metadata useful for traffic control (intersecting paths, merging/diverging paths).  These fixed paths and metadata keeps the car behavior relatively simple:</p>
+<ul>
+<li>When a car reaches a fork, it just chooses the next connected path at random (any choice is valid)</li>
+<li>Collision avoidance doesn't require any physics or spatial processing -- it's more efficient to just check the relative positions of the handful of cars on relevant paths</li>
+<li>Intersections can be easily controlled by toggling open/closed states of different paths</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>And with that, we've reached the state of the present day.  I'm sure we'll add more road features in the future, but for now we're focusing on other priorities.  Hopefully the next update will be sooner than 17 months 😄</p>
+<p><img src="https://frozenpizzastudios.com/blog/level-editor-update/present-day.png" alt="present day" /></p>
+<p>If you'd like to support Delivery Derby, consider <a rel="external" href="https://store.steampowered.com/app/4615650/Delivery_Derby/?snr=1_5_1100__1100&amp;utm_source=fps-website">wishlisting it on Steam</a>, following us on social media (links below), and telling your friends!</p>
+
+
+<nav class="custom">
+    
+    <a href="https:&#x2F;&#x2F;frozenpizzastudios.com&#x2F;blog&#x2F;building-a-level-builder&#x2F;">
+        <span>←</span>
+        Building a Level Builder
+    </a>
+    
+    <a href="/">Home</a>
+    <a href="/blog">All Posts</a>
+    <span style="flex-grow: 1"></span>
+    
+</nav>
+
+    </main>
+    <footer>
+        <div style="margin-bottom: 0.5em">
+        
+            <a
+                href="https:&#x2F;&#x2F;store.steampowered.com&#x2F;curator&#x2F;42947587"
+                target="_blank"
+                title="steam"
+                style="text-decoration: none; margin-left: 0.25em">
+                <img src="/icons/steam.svg" width="28px"/>
+            </a>
+        
+            <a
+                href="https:&#x2F;&#x2F;bsky.app&#x2F;profile&#x2F;frozenpizzastudios.bsky.social"
+                target="_blank"
+                title="bluesky"
+                style="text-decoration: none; margin-left: 0.25em">
+                <img src="/icons/bluesky.svg" width="28px"/>
+            </a>
+        
+            <a
+                href="https:&#x2F;&#x2F;x.com&#x2F;frozenzastudios"
+                target="_blank"
+                title="x"
+                style="text-decoration: none; margin-left: 0.25em">
+                <img src="/icons/x.svg" width="28px"/>
+            </a>
+        
+            <a
+                href="https:&#x2F;&#x2F;www.instagram.com&#x2F;frozenpizzastudios&#x2F;"
+                target="_blank"
+                title="instagram"
+                style="text-decoration: none; margin-left: 0.25em">
+                <img src="/icons/instagram.svg" width="28px"/>
+            </a>
+        
+            <a
+                href="https:&#x2F;&#x2F;www.tiktok.com&#x2F;@frozenzastudios"
+                target="_blank"
+                title="tiktok"
+                style="text-decoration: none; margin-left: 0.25em">
+                <img src="/icons/tiktok.svg" width="28px"/>
+            </a>
+        
+            <a
+                href="https:&#x2F;&#x2F;www.youtube.com&#x2F;channel&#x2F;UChQcrZDU9D5o7C5vbkbcciA"
+                target="_blank"
+                title="youtube"
+                style="text-decoration: none; margin-left: 0.25em">
+                <img src="/icons/youtube.svg" width="28px"/>
+            </a>
+        
+            <a
+                href="mailto:frozenpizzastudios@gmail.com"
+                target="_blank"
+                title="email"
+                style="text-decoration: none; margin-left: 0.25em">
+                <img src="/icons/email.svg" width="28px"/>
+            </a>
+        
+        </div>
+        &copy;2023&ndash;2026 Frozen Pizza Studios, LLC
+    </footer>
+    
+    <script type="module">
+        import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: "dark",
+        });
+        await Promise.all(
+            Array.from(
+                document.querySelectorAll("code[data-lang=\"mermaid\"]")
+            )
+            .map((block, i) => {
+                return mermaid
+                    .render(`mermaid-${i}`, block.innerText)
+                    .then(({ svg }) => {
+                        block.parentNode.outerHTML = svg;
+                    })
+            })
+        );
+    </script>
+    
+    
+</body>
+</html>
